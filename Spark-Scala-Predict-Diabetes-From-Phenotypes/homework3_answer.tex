@@ -1,0 +1,234 @@
+\documentclass[12pt]{article}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\RequirePackage[colorlinks]{hyperref}
+\usepackage[lined,boxed,linesnumbered,commentsnumbered]{algorithm2e}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{subfloat}
+
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+% Commands
+\newenvironment{solution}
+  {\begin{proof}[Solution]}
+  {\end{proof}}
+
+\newcommand{\snehaedit}[1]{\textcolor{green}{\emph{[Sneha: #1]}}}
+\newcommand{\hsedit}[1]{\textcolor{magenta}{\emph{[Hang: #1]}}}
+\newcommand{\meeraedit}[1]{\textcolor{red}{\emph{[Meera: #1]}}}
+\newcommand{\prpedit}[1]{\textcolor{blue}{\emph{[Prp: #1]}}}
+
+
+\title{CSE6250: Homework 3 Answer}
+\author{Name: Yichao Zhang\\ GT User ID: yzhang3414}
+\date{Deadline: Feb 17, 2019, 11:55 PM AoE}
+
+\begin{document}
+
+\maketitle
+
+$\mathbf{2.3 \ K-Means \ Clustering}$ 
+$\mathbf{}$
+
+$\mathbf{b.}$
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 18.85\% & 56.12\%  & 24.04\%\\
+Cluster 2  & 81.15\%  & 43.35\% & 72.62\%\\
+Cluster 3  & 0.00\%  & 0.53\%  & 3.34\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using all features \\ Purity:  0.50759}
+\end{table} 
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 100.00\% & 100.00\%  & 30.87\%\\
+Cluster 2  & 0.00\%  & 0.00\% & 62.67\%\\
+Cluster 3  & 0.00\%  & 0.00\%  & 6.46\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using filtered features \\ Purity: 0.56916}
+\end{table} 
+
+
+
+\newpage
+$\mathbf{2.4 \ Clustering \ with \ Gaussian \ Mixture \ Model \ (GMM)}$
+$\mathbf{}$
+
+$\mathbf{b.}$
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 83.09\% & 49.47\%  & 72.96\%\\
+Cluster 2  & 16.91\%  & 41.67\% & 19.33\%\\
+Cluster 3  & 0.00\%  & 8.86\%  & 7.71\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using all features\\ Purity: 0.49295}
+\end{table} 
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 80.33\% & 97.78\%  & 83.49\%\\
+Cluster 2  & 17.32\%  & 0.00\% & 4.72\%\\
+Cluster 3  & 2.36\%  & 2.22\%  & 11.79\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using filtered features\\ Purity: 0.41773}
+\end{table} 
+
+
+
+\newpage
+$\mathbf{2.5 \ Clustering \ with \ Streaming \ K-Means }$
+$\mathbf{}$
+
+$\mathbf{a.}$
+Update Rule
+\begin{equation}
+\begin{aligned}
+C_{t+1} & = \frac{\alpha C_t N_t + C_{Bt} N_{Bt}} {\alpha N_t + N_{Bt}}\\
+N_{t+1}& = N_t + N_{Bt}
+\end{aligned} 
+\label{eq:SKM}
+\end{equation}
+
+where $\alpha$ is the weight, or decay factor, which controls the forgetfulness;
+$C_t$ is the previous center of cluster;
+$N_t$ is the number of points in the previous cluster;
+$C_{t+1}$ is the center of new cluster with the new batch;
+$C_{Bt}$ is the center of new batch;
+$N_{Bt}$ is the number of points in the the new batch.\\
+
+How it works:
+
+1. When some new points arrived during time t to t+1, we find the nearest cluster at t for each new point;
+
+2. For each cluster at t+1, we update its center and number by equation (\ref{eq:SKM});\\
+
+
+Pros:
+Fast for streaming data. Since we don't need to re-calculate on previous data points. The information of previous points has been recorded by $C_t$ and $N_t$.\\
+
+Cons:
+The cluster allocation of previous points cannot be updated quickly like K-Means. The clustering result is depend on the receiving order of the data points, and it is not as robust as K-Means. For some new points, with very different features, SKM may not generate a new cluster like K-Means. \\
+
+The forgetfulness value control the weight of the previous data points. If we care more about the recent data, we can decrease the previous weight, thus the model forget the data long time ago; If we want to treat each data the same, we just set the same weight.\\
+
+
+$\mathbf{c.}$
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 0.41\% & 22.26\%  & 36.28\%\\
+Cluster 2  & 64.86\%  & 68.99\% & 45.35\%\\
+Cluster 3  & 34.73\%  & 8.76\%  & 18.37\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using all features\\ Purity: 0.48238}
+\end{table} 
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c}
+\hline
+Percentage Cluster & Case & Control & Unknown  \\ \hline
+Event Count & & &  \\ 
+Cluster 1 & 0.00\% & 2.22\%  & 0.10\%\\
+Cluster 2  & 100.00\%  & 97.78\% & 31.18\%\\
+Cluster 3  & 0.00\%  & 0.00\%  & 68.72\% \\ \hline
+  & 100\%  & 100\%  & 100\% \\ \hline
+\end{tabular}
+\caption{Clustering with 3 centers using filtered features\\ Purity: 0.57503}
+\end{table} 
+
+
+\newpage
+$\mathbf{2.6 \  Discussion \ on \ K-means \ and \ GMM}$ 
+$\mathbf{}$
+
+$\mathbf{a.}$
+From 2.3 b and 2.4 b, we can find that:
+
+(1) With all features:
+
+Both K-Means and GMM allocate most of the point in Cluster 1 and Cluster 2, and both have low purities (about 0.5);
+
+(2) With filtered features:
+
+K-Means allocate all the Case and Control into the Cluster1, and most of Unknown into Cluster 2. It is a little better than that with all features (higher purity), since it almost separate the Known and Unknown into different clusters.
+
+However, GMM allocate most of all 3 cases into cluster 1, with a little data (might be noisy data) into Cluster 2 and 3. The performance is lower than all features (lower purity).
+
+Typically, filtered features make the clustering model better, and raise the purity of models, we can clearly see that from the table in the next part (b). The reason why GMM decrease the purity is because the noisy data affects a lot when k is small.\\
+
+
+$\mathbf{b.}$
+
+\begin{table}[th]
+\centering
+\begin{tabular}{@{}c|c|c|c|c}
+\hline
+ & K-Means & K-Means & GMM & GMM \\
+k & All features & Filtered features & All features & Filtered features   \\ \hline
+  2 & 0.57213  & 0.56847  & 0.51112 & 0.64195\\
+  5 &  0.60575 & 0.66678  &  0.47831 & 0.85271\\
+10 & 0.60982  &  0.89203 & 0.57023 & 0.89341 \\
+15 & 0.72424  &  0.89100 & 0.64561 & 0.88686\\ \hline
+\end{tabular}
+\caption{Purity values for different number of clusters}
+\end{table} 
+
+From the table , we can find that:
+
+(1) Increasing k raises the purity for both K-Means and GMM.
+
+(2) When k is big enough (like 5, 10, 15 in this table), filtered features effectively raise the purity for both K-Means and GMM. But too big k is not necessary for filtered features. Here we can see that k=10 and k=15 have similar purity with filtered features.
+
+(3) K-Means has a better purity than GMM with all features. While GMM has a better purity for most of k with filtered features.
+
+\end{document}
+\end{document}
