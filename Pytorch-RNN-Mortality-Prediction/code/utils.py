@@ -110,6 +110,7 @@ def evaluate(model, device, data_loader, criterion, print_freq=10):
 			accuracy.update(compute_batch_accuracy(output, target).item(), target.size(0))
 
 			y_true = target.detach().to('cpu').numpy().tolist()
+			# .max(1) return ( tensor([max,...]), tensor([idx of max, ...])
 			y_pred = output.detach().to('cpu').max(1)[1].numpy().tolist()
 			results.extend(list(zip(y_true, y_pred)))
 
