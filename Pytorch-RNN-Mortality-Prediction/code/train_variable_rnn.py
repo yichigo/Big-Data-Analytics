@@ -78,18 +78,18 @@ for epoch in range(NUM_EPOCHS):
 		torch.save(model, os.path.join(PATH_OUTPUT, "MyVariableRNN.pth"))
 
 best_model = torch.load(os.path.join(PATH_OUTPUT, "MyVariableRNN.pth"))
-# TODO: For your report, try to make plots similar to those in the previous task.
-# TODO: You may use the validation set in case you cannot use the test set.
+# For your report, try to make plots similar to those in the previous task.
+# You may use the validation set in case you cannot use the test set.
 plot_learning_curves(train_losses, valid_losses, train_accuracies, valid_accuracies)
 valid_loss, valid_accuracy, valid_results = evaluate(best_model, device, valid_loader, criterion)
 class_names = ['0', '1']
 plot_confusion_matrix(valid_results, class_names)
 
-# TODO: Complete predict_mortality
+# Complete predict_mortality
 def predict_mortality(model, device, data_loader):
 	model.eval()
-	# TODO: Evaluate the data (from data_loader) using model,
-	# TODO: return a List of probabilities
+	# Evaluate the data (from data_loader) using model,
+	# return a List of probabilities
 	input, target = zip(*data_loader)
 
 	probas = []

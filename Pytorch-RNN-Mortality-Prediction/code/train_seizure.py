@@ -24,7 +24,7 @@ PATH_OUTPUT = "../output/seizure/"
 os.makedirs(PATH_OUTPUT, exist_ok=True)
 
 # Some parameters
-MODEL_TYPE = 'MLP'  # TODO: Change this to 'MLP', 'CNN', or 'RNN' according to your task
+MODEL_TYPE = 'MLP'  # Change this to 'MLP', 'CNN', or 'RNN' according to your task
 NUM_EPOCHS = 50
 BATCH_SIZE = 32
 USE_CUDA = False  # Set 'True' if you want to use GPU

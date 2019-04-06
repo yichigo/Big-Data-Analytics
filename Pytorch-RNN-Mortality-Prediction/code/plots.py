@@ -1,15 +1,15 @@
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-# TODO: You can use other packages if you want, e.g., Numpy, Scikit-learn, etc.
+# You can use other packages if you want, e.g., Numpy, Scikit-learn, etc.
 import numpy as np
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 
 def plot_learning_curves(train_losses, valid_losses, train_accuracies, valid_accuracies):
-	# TODO: Make plots for loss curves and accuracy curves.
-	# TODO: You do not have to return the plots.
-	# TODO: You can save plots as files by codes here or an interactive way according to your preference.
+	# Make plots for loss curves and accuracy curves.
+	# You do not have to return the plots.
+	# You can save plots as files by codes here or an interactive way according to your preference.
 	plt.figure()
 	plt.plot(np.arange(len(train_losses)), train_losses, label='Train')
 	plt.plot(np.arange(len(valid_losses)), valid_losses, label='Validation')
@@ -30,9 +30,9 @@ def plot_learning_curves(train_losses, valid_losses, train_accuracies, valid_acc
 
 
 def plot_confusion_matrix(results, class_names):
-	# TODO: Make a confusion matrix plot.
-	# TODO: You do not have to return the plots.
-	# TODO: You can save plots as files by codes here or an interactive way according to your preference.
+	# Make a confusion matrix plot.
+	# You do not have to return the plots.
+	# You can save plots as files by codes here or an interactive way according to your preference.
 	
 	y_true, y_pred = zip(*results)
 	# Compute confusion matrix

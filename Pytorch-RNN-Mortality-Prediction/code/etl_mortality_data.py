@@ -15,8 +15,8 @@ def convert_icd9(icd9_object):
 	:return: extracted main digits of ICD-9 code
 	"""
 	icd9_str = str(icd9_object)
-	# TODO: Extract the the first 3 or 4 alphanumeric digits prior to the decimal point from a given ICD-9 code.
-	# TODO: Read the homework description carefully.
+	# Extract the the first 3 or 4 alphanumeric digits prior to the decimal point from a given ICD-9 code.
+	# Read the homework description carefully.
 	if icd9_str[0] != 'E':
 		converted = icd9_str[:3]
 	else:
@@ -29,7 +29,7 @@ def build_codemap(df_icd9, transform):
 	"""
 	:return: Dict of code map {main-digits of ICD9: unique feature ID}
 	"""
-	# TODO: We build a code map using ONLY train data. Think about how to construct validation/test sets using this.
+	# We build a code map using ONLY train data. Think about how to construct validation/test sets using this.
 	
 	df_digits = df_icd9['ICD9_CODE'].apply(transform)
 	unique_digits = df_digits.unique()
@@ -45,14 +45,14 @@ def create_dataset(path, codemap, transform):
 	:param transform: e.g. convert_icd9
 	:return: List(patient IDs), List(labels), Visit sequence data as a List of List of List.
 	"""
-	# TODO: 1. Load data from the three csv files
-	# TODO: Loading the mortality file is shown as an example below. Load two other files also.
+	# 1. Load data from the three csv files
+	# Loading the mortality file is shown as an example below. Load two other files also.
 	df_mortality = pd.read_csv(os.path.join(path, "MORTALITY.csv"))
 	df_admissions = pd.read_csv(os.path.join(path, "ADMISSIONS.csv"))
 	df_diagnoses = pd.read_csv(os.path.join(path, "DIAGNOSES_ICD.csv"))
 
-	# TODO: 2. Convert diagnosis code in to unique feature ID.
-	# TODO: HINT - use 'transform(convert_icd9)' you implemented and 'codemap'.
+	# 2. Convert diagnosis code in to unique feature ID.
+	# use 'transform(convert_icd9)' you implemented and 'codemap'.
 	df_diagnoses['ICD9_CODE'] = df_diagnoses['ICD9_CODE'].apply(transform)
 	df_diagnoses['FEATURE_ID'] = df_diagnoses['ICD9_CODE'].map(codemap)
 
@@ -60,10 +60,10 @@ def create_dataset(path, codemap, transform):
 	df_diagnoses = df_diagnoses[pd.notnull(df_diagnoses['FEATURE_ID'])]
 	df_diagnoses['FEATURE_ID'] = df_diagnoses['FEATURE_ID'].astype(int)
 
-	# TODO: 3. Group the diagnosis codes for the same visit.
+	# 3. Group the diagnosis codes for the same visit.
 	df_diagnoses = pd.DataFrame(df_diagnoses.groupby(['HADM_ID'])['FEATURE_ID'].apply(list))
 
-	# TODO: 4. Group the visits for the same patient.
+	# 4. Group the visits for the same patient.
 	df_admissions = df_admissions[['SUBJECT_ID', 'HADM_ID', 'ADMITTIME']]
 	df_admissions = df_admissions.sort_values(['SUBJECT_ID','ADMITTIME'],ascending=True)
 
@@ -71,15 +71,15 @@ def create_dataset(path, codemap, transform):
 	df = pd.DataFrame(df.groupby(['SUBJECT_ID'])['FEATURE_ID'].apply(list))
 	df = df.join(df_mortality.set_index('SUBJECT_ID'), on = 'SUBJECT_ID')
 
-	# TODO: 5. Make a visit sequence dataset as a List of patient Lists of visit Lists
+	# 5. Make a visit sequence dataset as a List of patient Lists of visit Lists
 	seq_data = list(df['FEATURE_ID'].values)
 
-	# TODO: Visits for each patient must be sorted in chronological order.  (it has been sorted in step 4)
-	# TODO: 6. Make patient-id List and label List also.
+	# Visits for each patient must be sorted in chronological order.  (it has been sorted in step 4)
+	# 6. Make patient-id List and label List also.
 	patient_ids = list(df.index.values)
 	labels = list(df['MORTALITY'].values)
 
-	# TODO: The order of patients in the three List output must be consistent. (be consistent by join function)
+	# The order of patients in the three List output must be consistent. (be consistent by join function)
 	return patient_ids, labels, seq_data
 
 

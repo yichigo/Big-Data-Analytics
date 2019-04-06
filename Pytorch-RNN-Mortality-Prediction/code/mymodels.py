@@ -105,7 +105,7 @@ class MyVariableRNN(nn.Module):
 		#self.drop = nn.Dropout(p=0.2)
 
 	def forward(self, input_tuple):
-		# HINT: Following two methods might be useful
+		# Following two methods might be useful
 		# 'pack_padded_sequence' and 'pad_packed_sequence' from torch.nn.utils.rnn
 		seqs, lengths = input_tuple
 		seqs = F.tanh(self.fc1(seqs))
